@@ -66,7 +66,8 @@ export function Hero() {
   return (
     <section
       id="home"
-      className="min-h-screen flex items-center justify-center relative overflow-hidden scroll-smooth"
+      className="min-h-screen flex items-center justify-center relative overflow-hidden scroll-smooth pt-28" 
+      // ⬆️ Added pt-28 so hero text starts below navbar
     >
       {/* Background Particles */}
       <div className="absolute inset-0 overflow-hidden">

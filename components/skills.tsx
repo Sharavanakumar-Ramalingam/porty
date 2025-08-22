@@ -3,25 +3,14 @@
 import { useEffect, useRef, useState } from "react"
 import { Card, CardContent } from "@/components/ui/card"
 import {
-  SiJavascript,
-  SiTypescript,
-  SiReact,
-  SiHtml5,
-  SiCss3,
-  SiPython,
-  SiMongodb,
-  SiMysql,
-  SiGit,
-  SiDocker,
-  SiKubernetes,
-  SiNodedotjs,
-  SiPhp,
-  SiPostgresql,
+  SiJavascript, SiTypescript, SiReact, SiHtml5, SiCss3,
+  SiPython, SiMongodb, SiMysql, SiGit, SiDocker,
+  SiKubernetes, SiNodedotjs, SiPhp, SiPostgresql
 } from "react-icons/si"
 import { DiJava } from "react-icons/di"
 
 export function Skills() {
-  const [visibleCards, setVisibleCards] = useState<number[]>([])
+  const [visibleCards, setVisibleCards] = useState(false)
   const sectionRef = useRef<HTMLElement>(null)
 
   const skills = [
@@ -42,48 +31,44 @@ export function Skills() {
     { name: "Kubernetes", icon: SiKubernetes, color: "text-sky-600" },
   ]
 
+  // 🔥 Observe whole section
   useEffect(() => {
-    const cards = sectionRef.current?.querySelectorAll(".skill-card")
-
     const observer = new IntersectionObserver(
       (entries) => {
-        entries.forEach((entry, i) => {
-          if (entry.isIntersecting) {
-            setVisibleCards((prev) => [...new Set([...prev, i])])
-          }
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) setVisibleCards(true)
         })
       },
       { threshold: 0.2 }
     )
 
-    cards?.forEach((card) => observer.observe(card))
-
+    if (sectionRef.current) observer.observe(sectionRef.current)
     return () => observer.disconnect()
   }, [])
 
-  // 🔑 Re-trigger animation on navigation click
+  // 🔑 Reset + replay when clicking navbar
   useEffect(() => {
     const handleHashChange = () => {
       if (window.location.hash === "#skills") {
-        setVisibleCards([]) // reset
-        setTimeout(() => {
-          const cards = sectionRef.current?.querySelectorAll(".skill-card")
-          cards?.forEach((_, i) => {
-            setVisibleCards((prev) => [...new Set([...prev, i])])
-          })
-        }, 100) // delay ensures smooth re-trigger
+        setVisibleCards(false)
+        setTimeout(() => setVisibleCards(true), 100)
       }
     }
-
     window.addEventListener("hashchange", handleHashChange)
     return () => window.removeEventListener("hashchange", handleHashChange)
   }, [])
 
   return (
-    <section id="skills" ref={sectionRef} className="py-20 bg-background relative overflow-hidden">
+    <section
+      id="skills"
+      ref={sectionRef}
+      className="py-20 bg-background relative overflow-hidden"
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="text-center mb-16 animate-fade-in-up">
-          <h2 className="text-4xl font-bold text-foreground mb-4 font-serif hover-3d">Skills & Expertise</h2>
+          <h2 className="text-4xl font-bold text-foreground mb-4 font-serif hover-3d">
+            Skills & Expertise
+          </h2>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto glass-strong p-4 rounded-lg">
             Technologies and tools I work with to bring ideas to life.
           </p>
@@ -104,14 +89,15 @@ export function Skills() {
             return (
               <Card
                 key={skill.name}
-                className={`skill-card glass hover-3d flex items-center justify-center p-6 transition-transform hover:scale-105 ${
-                  visibleCards.includes(index) ? direction : "opacity-0"
-                }`}
+                className={`skill-card glass hover-3d flex items-center justify-center p-6 transition-transform hover:scale-105
+                ${visibleCards ? direction : "opacity-0"}`}
                 style={{ animationDelay: `${index * 0.05}s` }}
               >
                 <CardContent className="flex flex-col items-center space-y-2">
                   <IconComponent className={`h-12 w-12 ${skill.color}`} />
-                  <span className="font-medium text-foreground text-center">{skill.name}</span>
+                  <span className="font-medium text-foreground text-center">
+                    {skill.name}
+                  </span>
                 </CardContent>
               </Card>
             )
