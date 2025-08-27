@@ -115,9 +115,9 @@ export function Hero() {
             <div className="flex flex-wrap gap-4">
               <Button size="lg" className="glow-button hover-3d">
                 <a
-                  href="mailto:sharavanakumar3006@gmail.com?subject=Hello Sharavana&body=I wanted to get in touch with you."
+                  href="SharavanaKumar_Resume.pdf"
                 >
-                  Get In Touch
+                  Hire Me
                 </a>
               </Button>
               <Button
